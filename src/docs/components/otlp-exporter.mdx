@@ -118,9 +118,9 @@ receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: localhost:55680
+        endpoint:
       http:
-        endpoint: localhost:55681
+        endpoint:
 exporters:
   otlphttp:
     endpoint: "https://<your region>-sls-agent-api.saas.appdynamics.com" // See [SaaS Domains and Regions](https://docs.appdynamics.com/display/PAA/SaaS+Domains+and+IP+Ranges).
