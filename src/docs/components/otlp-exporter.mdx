@@ -13,7 +13,7 @@ import SubSectionSeparator from "components/MdxSubSectionSeparator/subsectionSep
 An exporter is a component in the OpenTelemetry [Collector](https://github.com/open-telemetry/opentelemetry-collector) configured
 to send data to different systems/back-ends. Different exporters converts
 [OpenTelemetry protocol (OTLP)](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/otlp.md)
-formatted data to their respective predefined back-end format  and exports this data to be interpreted by the back-end or system.
+formatted data to their respective predefined back-end format and exports this data to be interpreted by the back-end or system.
 
 <SectionSeparator />
 
@@ -63,8 +63,7 @@ For using any backends supported by OpenTelemetry, make sure you have set up the
 
 ## AppDynamics
 
-AppDynamics supports OpenTelemetry by ingesting OTLP directly, so users of the AWS Distro for OpenTelemetry (ADOT) can send tracing data directly to 
-AppDynamics without the need for additional plugins or non-OTLP exporters.
+AppDynamics supports OpenTelemetry by ingesting OTLP directly, so users of the AWS Distro for OpenTelemetry (ADOT) can send tracing data directly to AppDynamics without the need for additional plugins or non-OTLP exporters.
 
 <SubSectionSeparator />
 
@@ -72,17 +71,17 @@ AppDynamics without the need for additional plugins or non-OTLP exporters.
 
 Before you can use the AWS Distro for OpenTelemetry with the AppDynamics endpoint, you need:
 
-* You need AppDynamics SaaS Controller >= v21.2.0.
-* You need to be admitted to the AppDynamics OpenTelemetry private beta program.
+* AppDynamics SaaS Controller >= 22.4.0.
+* OpenTelemetry Collector version >= 0.36.0
 
 <SubSectionSeparator />
 
 ### Configuration (Collector)
 
-The configuration takes place in the OTLP exporter in the Collector config YAML file.
+The configuration takes place in the OTLP exporter in your Collector YAML config file.
 
-* Set the OTLP endpoint through the [OTLP HTTP Exporter](https://github.com/open-telemetry/opentelemetry-collector/tree/master/exporter/otlphttpexporter). To configure your AppDynamics Controller to work with the ADOT Collector, edit your `otel-config.yml` configuration file.
-* Set the AppDynamics API key `<x-api-key>` (Your AppDynamics API key must be defined as an HTTP header. To obtain your unique x-api-key, you should work closely with your AppDynamics account team.)
+* Set the OTLP endpoint through the OTLP HTTP Exporter. To configure your AppDynamics Controller to work with the ADOT Collector, edit your `otel-config.yml` configuration file.
+* Set the AppDynamics API key `<x-api-key>`. Your AppDynamics API key must be defined as an HTTP header. To obtain your unique `x-api-key`, you should work closely with your AppDynamics account team.
 * Use resource attributes to add your AppDynamics account information:
     * `appdynamics.controller.account`: Your AppDynamics Controller account name.
     * `appdynamics.controller.host`: your AppDynamics Controller host name.
@@ -90,7 +89,7 @@ The configuration takes place in the OTLP exporter in the Collector config YAML 
     * `service.name` your AppDynamics tier name. trace resource attribute for every service being monitored.
     * `service.namespace`: your AppDynamics application name. Set corresponding `service.namespace` trace resource attribute for every service being monitored.
 
-For custom attributes, see [Ingest OpenTelemetry Trace Data](https://docs.appdynamics.com/display/PRO21/Ingest+OpenTelemetry+Trace+Data)
+For additional configurations, see [AppDynamics OpenTelemetry documentation](https://docs.appdynamics.com/latest/en/application-monitoring/appdynamics-for-opentelemetry/configure-the-opentelemetry-collector).
 
 <SubSectionSeparator />
 
@@ -109,19 +108,22 @@ processors:
     - key: appdynamics.controller.port
       action: upsert
       value: 443
+  - key: service.namespace
+      action: upsert    
+    value: shop
   batch:
     timeout: 30s
-    send_batch_size: 8192
+    send_batch_size: 90
 receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: localhost:55680
+        endpoint:
       http:
-        endpoint: localhost:55681
+        endpoint:
 exporters:
   otlphttp:
-    endpoint: "https://pdx-sls-agent-api.saas.appdynamics.com"
+    endpoint: "https://<your region>-sls-agent-api.saas.appdynamics.com" // See [SaaS Domains and Regions](https://docs.appdynamics.com/display/PAA/SaaS+Domains+and+IP+Ranges).
     headers: {"x-api-key": "****************"}
 service:
   pipelines:
