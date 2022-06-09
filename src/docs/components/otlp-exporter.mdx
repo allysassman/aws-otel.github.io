@@ -13,7 +13,7 @@ import SubSectionSeparator from "components/MdxSubSectionSeparator/subsectionSep
 An exporter is a component in the OpenTelemetry [Collector](https://github.com/open-telemetry/opentelemetry-collector) configured
 to send data to different systems/back-ends. Different exporters converts
 [OpenTelemetry protocol (OTLP)](https://github.com/open-telemetry/opentelemetry-specification/blob/master/specification/protocol/otlp.md)
-formatted data to their respective predefined back-end format  and exports this data to be interpreted by the back-end or system.
+formatted data to their respective predefined back-end format and exports this data to be interpreted by the back-end or system.
 
 <SectionSeparator />
 
@@ -89,7 +89,7 @@ The configuration takes place in the OTLP exporter in your Collector YAML config
     * `service.name` your AppDynamics tier name. trace resource attribute for every service being monitored.
     * `service.namespace`: your AppDynamics application name. Set corresponding `service.namespace` trace resource attribute for every service being monitored.
 
-For additional configurations, see [AppDynamics OpenTelemetry documentation](https://docs.appdynamics.com/display/latest/AppDynamics+for+OpenTelemetry).
+For additional configurations, see [AppDynamics OpenTelemetry documentation](https://docs.appdynamics.com/22.5/en/application-monitoring/appdynamics-for-opentelemetry/configure-the-opentelemetry-collector).
 
 <SubSectionSeparator />
 
